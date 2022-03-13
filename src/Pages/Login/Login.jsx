@@ -5,7 +5,6 @@ import mail from "../../assets/mail.svg";
 import password from "../../assets/password.svg";
 import checkOn from "../../assets/checkOn.svg";
 import { useNavigate } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
 //FIREBASE @imports
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase-config";
@@ -35,7 +34,7 @@ export default function Login() {
       try {
         await signInWithEmailAndPassword(auth, email, pwd);
         if (rememberUser) {
-          localStorage.setItem("user", user.uid);
+          localStorage.setItem("user", user?.uid);
         }
         navigate("/profile");
       } catch (err) {

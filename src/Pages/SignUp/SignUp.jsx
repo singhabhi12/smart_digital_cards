@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState} from "react";
 import styles from "./SignUp.module.scss";
 import close from "../../assets/close.svg";
 import mail from "../../assets/mail.svg";
@@ -7,9 +7,6 @@ import user from "../../assets/user2.svg";
 import checkOn from "../../assets/checkOn.svg";
 import { useNavigate } from "react-router-dom";
 
-//TOASTIFY @imports
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../Helper/Context";
 
 export default function SignUp() {
@@ -19,7 +16,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
-  
+
   //handlers functions
   const handleEmailInput = (event) => setEmail(event.target.value);
   const handleUsernameInput = (event) => setUsername(event.target.value);
@@ -31,21 +28,7 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (email !== "" && pwd !== "") {
-      try {
-        await registerUser(username, email, pwd);
-      } catch (err) {
-        console.error(err.message);
-        toast.error("User Invalid / Already Registered!", {
-          position: "top-center",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }
+      await registerUser(username, email, pwd);
     }
   };
 
@@ -119,18 +102,6 @@ export default function SignUp() {
           </button>
         </form>
       </div>
-
-      <ToastContainer
-        position="top-center"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   );
 }

@@ -29,16 +29,26 @@ export default function CreateCard() {
   const [profilePic, setProfilePic] = useState("");
 
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, createCard } = useContext(AuthContext);
 
   useEffect(() => {
     if (!user) navigate("/");
     console.log("Profile pic:", profilePic);
   }, [user, profilePic]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("card created!");
+    await createCard(user, {
+      fullName,
+      profession,
+      email,
+      contact,
+      location,
+      whatsapp: socials?.whatsapp,
+      fb: socials?.fb,
+      web: socials?.web,
+      file: profilePic,
+    });
   };
   return (
     <Card>
@@ -169,7 +179,7 @@ export default function CreateCard() {
               <img src={fbIcon} alt="facebook_icon" />
               <span>|</span>
               <input
-                type="text"
+                type="url"
                 value={socials?.fb}
                 onChange={(event) =>
                   setSocials({

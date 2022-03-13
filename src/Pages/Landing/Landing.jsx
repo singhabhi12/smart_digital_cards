@@ -11,7 +11,7 @@ export default function Landing() {
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
-      if (localStorage.getItem("user") === user.uid) {
+      if (localStorage.getItem("user") === user?.uid) {
         navigate("/profile");
       }
     }
