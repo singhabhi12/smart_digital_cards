@@ -2,9 +2,20 @@ import Layout from "../../Layouts/Layout";
 import styles from "./Landing.module.scss";
 import cards from "../../assets/cards.svg";
 import { useNavigate } from "react-router-dom";
-export default function Landing() {
-  const navigate = useNavigate()
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../../Helper/Context";
 
+export default function Landing() {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      if (localStorage.getItem("user") === user.uid) {
+        navigate("/profile");
+      }
+    }
+  }, [user]);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -20,8 +31,12 @@ export default function Landing() {
         </p>
 
         <div className={styles.btns}>
-          <button className={styles.btn} onClick={() => navigate('/sign-up')}>Sign Up</button>
-          <button className={styles.btn}>Login</button>
+          <button className={styles.btn} onClick={() => navigate("/sign-up")}>
+            Sign Up
+          </button>
+          <button className={styles.btn} onClick={() => navigate("/login")}>
+            Login
+          </button>
         </div>
 
         <div className={styles.footer_txt}>
