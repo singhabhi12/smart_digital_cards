@@ -6,7 +6,7 @@ import {
 import { query, getDocs, collection, where, addDoc } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { auth, db, storage } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
 
@@ -17,11 +17,12 @@ import "react-toastify/dist/ReactToastify.css";
 export const AuthContext = createContext({});
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  const [card, setCard] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
 
   //firebase helper methdods
   async function getUser() {
@@ -34,6 +35,7 @@ const AuthProvider = ({ children }) => {
       console.log(err.message);
     }
   }
+
   async function registerUser(username, email, pwd) {
     try {
       await createUserWithEmailAndPassword(auth, email, pwd);
@@ -56,6 +58,24 @@ const AuthProvider = ({ children }) => {
       });
     }
   }
+
+  const fetchCard = useCallback(async (uid) => {
+    try {
+      const q = await query(
+        collection(db, "users"),
+        where("uid", "==", uid)
+      );
+      const querySnapshot = await getDocs(q);
+      await querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log("Card fetched 🔥 =>", doc.data());
+        setCard(doc.data());
+      });
+    } catch (error) {
+      console.log("Card fetch miss>", error.message);
+    }
+  }, []);
+
   const createCard = async (user, data) => {
     try {
       const q = query(collection(db, "users"), where("uid", "==", user.uid));
@@ -79,16 +99,8 @@ const AuthProvider = ({ children }) => {
           profilePic: downloadUrl,
         });
 
-        toast.success("Card successfully created!", {
-          position: "top-center",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        console.log("Card Created 🔥");
+        navigate(`/card/${user.uid}`);
       }
     } catch (err) {
       console.error(err);
@@ -133,6 +145,8 @@ const AuthProvider = ({ children }) => {
         user,
         registerUser,
         createCard,
+        fetchCard,
+        card,
       }}
     >
       {children}

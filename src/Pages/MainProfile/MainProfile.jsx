@@ -37,7 +37,7 @@ export default function MainProfile() {
     {
       icon: user_icon,
       info: "Your Business Card",
-      redirect: "",
+      redirect: `/card/${user.uid}`,
     },
     {
       icon: savecard_icon,
