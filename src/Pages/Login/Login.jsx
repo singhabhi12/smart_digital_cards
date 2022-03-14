@@ -54,75 +54,80 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.head}>
-        <div className={styles.nav}>
-          <img src={close} alt="close btn" onClick={() => navigate(-1)} />
-        </div>
-        <h1>Welcome</h1>
-        <p>Fill in the credentials to login.</p>
-      </div>
-
-      <div className={styles.form_container}>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Email
-            <div className={styles.input_cntr}>
-              <img src={mail} alt="icon" />
-              <input
-                type="email"
-                value={email}
-                onChange={handleEmailInput}
-                placeholder="richardhendricks@pp.com"
-                required
-              />
-            </div>
-          </label>
-          <label>
-            Password
-            <div className={styles.input_cntr}>
-              <img src={password} alt="icon" />
-              <input
-                type="password"
-                value={pwd}
-                onChange={handlePwdInput}
-                placeholder="*  *  *  *  *  *  *  *"
-                required
-              />
-            </div>
-            <p className={styles.pwdRule}>Reset Password</p>
-          </label>
-
-          <div className={styles.login_policy}>
-            {rememberUser ? (
-              <img
-                src={checkOn}
-                alt="icon"
-                onClick={() => setRememberStatus(false)}
-              />
-            ) : (
-              <input type="checkbox" onClick={() => setRememberStatus(true)} />
-            )}
-            <span>Remember me next time.</span>
+    <div className={styles.login_page}>
+      <div className={styles.container}>
+        <div className={styles.head}>
+          <div className={styles.nav}>
+            <img src={close} alt="close btn" onClick={() => navigate(-1)} />
           </div>
+          <h1>Welcome</h1>
+          <p>Fill in the credentials to login.</p>
+        </div>
 
-          <button className={styles.submit_btn} type="submit">
-            {" "}
-            Login
-          </button>
-        </form>
+        <div className={styles.form_container}>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Email
+              <div className={styles.input_cntr}>
+                <img src={mail} alt="icon" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={handleEmailInput}
+                  placeholder="richardhendricks@pp.com"
+                  required
+                />
+              </div>
+            </label>
+            <label>
+              Password
+              <div className={styles.input_cntr}>
+                <img src={password} alt="icon" />
+                <input
+                  type="password"
+                  value={pwd}
+                  onChange={handlePwdInput}
+                  placeholder="*  *  *  *  *  *  *  *"
+                  required
+                />
+              </div>
+              <p className={styles.pwdRule}>Reset Password</p>
+            </label>
+
+            <div className={styles.login_policy}>
+              {rememberUser ? (
+                <img
+                  src={checkOn}
+                  alt="icon"
+                  onClick={() => setRememberStatus(false)}
+                />
+              ) : (
+                <input
+                  type="checkbox"
+                  onClick={() => setRememberStatus(true)}
+                />
+              )}
+              <span>Remember me next time.</span>
+            </div>
+
+            <button className={styles.submit_btn} type="submit">
+              {" "}
+              Login
+            </button>
+          </form>
+        </div>
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   );
 }

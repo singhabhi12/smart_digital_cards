@@ -62,56 +62,62 @@ export default function MainProfile() {
     navigate("/");
   };
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <nav>
-          <h3>My Profile</h3>
-          <button onClick={() => logout()}>Sign out</button>
-        </nav>
-      </div>
-      <div className={styles.body}>
-        <div className={styles.profile}>
-          <img src={ducky} alt="profile_image" className={styles.profile_img} />
-          <div className={styles.profile_info}>
-            <h4 className={styles.username}>{user?.displayName}</h4>
-            <p className={styles.useremail}>{user?.email}</p>
-            <a href="#" className={styles.edit_profile}>
-              Edit Profile
-            </a>
+    <div className={styles.profile_page}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <nav>
+            <h3>My Profile</h3>
+            <button onClick={() => logout()}>Sign out</button>
+          </nav>
+        </div>
+        <div className={styles.body}>
+          <div className={styles.profile}>
+            <img
+              src={ducky}
+              alt="profile_image"
+              className={styles.profile_img}
+            />
+            <div className={styles.profile_info}>
+              <h4 className={styles.username}>{user?.displayName}</h4>
+              <p className={styles.useremail}>{user?.email}</p>
+              <a href="#" className={styles.edit_profile}>
+                Edit Profile
+              </a>
+            </div>
+          </div>
+
+          <div className={styles.profile_utilities}>
+            {utilities.map((util, idx) => {
+              return <UtilityCard data={util} key={idx} />;
+            })}
+          </div>
+
+          <div className={styles.profile_share}>
+            <div className={styles.pofile_btns}>
+              <button className={styles.send_profile}>
+                <img src={send_icon} alt="send_icon" />
+                {/* <span>Send Card</span> */}
+              </button>
+              <button className={styles.receive_profile}>
+                <img src={barcode_icon} alt="barcode_icon" />
+                {/* <span>Receive Card</span> */}
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className={styles.profile_utilities}>
-          {utilities.map((util, idx) => {
-            return <UtilityCard data={util} key={idx} />;
-          })}
-        </div>
-
-        <div className={styles.profile_share}>
-          <div className={styles.pofile_btns}>
-            <button className={styles.send_profile}>
-              <img src={send_icon} alt="send_icon" />
-              {/* <span>Send Card</span> */}
-            </button>
-            <button className={styles.receive_profile}>
-              <img src={barcode_icon} alt="barcode_icon" />
-              {/* <span>Receive Card</span> */}
-            </button>
-          </div>
-        </div>
+        <ToastContainer
+          position="top-center"
+          autoClose={12}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
-
-      <ToastContainer
-        position="top-center"
-        autoClose={12}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   );
 }

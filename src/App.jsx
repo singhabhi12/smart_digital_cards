@@ -6,7 +6,7 @@ import Login from "./Pages/Login/Login";
 import MainProfile from "./Pages/MainProfile/MainProfile";
 import AuthProvider from "./Helper/Context";
 import CreateCard from "./Pages/CreateCard/CreateCard";
-import DisplayCard from "./Pages/DisplayCard/DisplayCard";
+import YourCard from "./Pages/YourCard/YourCard";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<MainProfile />} />
           <Route path="/create-card" element={<CreateCard />} />
-          <Route path="/card/:id" element={<DisplayCard />} />
+          <Route path="/card/:id" element={<YourCard />} />
         </Routes>
       </AuthProvider>
     </div>

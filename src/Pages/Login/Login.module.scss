@@ -1,17 +1,24 @@
-.container {
+.login_page {
   min-height: 100vh;
+  background: rgba(25, 26, 27, 1);
+  padding-left: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 750px;
+  margin: auto;
   background-size: cover;
   background-position: fixed;
   display: flex;
   flex-direction: column;
-  background: rgba(25, 26, 27, 1);
-  padding-left: 2.25rem;
+  padding: 1rem;
 
   .head {
     text-align: left;
 
     .nav {
-      margin: 3rem 0;
+      margin: 2rem 0;
       img {
         cursor: pointer;
       }
@@ -27,7 +34,6 @@
   }
   .form_container {
     margin-top: 2.5rem;
-    max-width: 90%;
     form {
       display: flex;
       flex-direction: column;

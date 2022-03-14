@@ -10,7 +10,13 @@ import {
 } from "../../assets/getAssests";
 
 import styles from "./CreateCard.module.scss";
-import { useEffect, useState, useContext } from "react";
+import {
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { AuthContext } from "../../Helper/Context";
 import { useNavigate } from "react-router-dom";
 
@@ -29,32 +35,54 @@ export default function CreateCard() {
   const [profilePic, setProfilePic] = useState("");
 
   const navigate = useNavigate();
-  const { user, createCard } = useContext(AuthContext);
+  const { user, Create_or_Update_Card, card, fetchCard } =
+    useContext(AuthContext);
+
+  useLayoutEffect(() => {
+    if (!user) navigate("/");
+    fetchCard(user?.uid);
+  }, [user, fetchCard]);
 
   useEffect(() => {
-    if (!user) navigate("/");
-    console.log("Profile pic:", profilePic);
-  }, [user, profilePic]);
+    if (card?.uid) {
+      console.log("no car fetched!");
+      card?.fullname && setFullName(card?.fullname);
+      card?.profession && setProfession(card?.profession);
+      card?.email && setEmail(card?.email);
+      card?.contact && setContact(card?.contact);
+      card?.location && setLocation(card?.location);
+      card?.socials &&
+        setSocials({
+          web: card?.socials?.web,
+          fb: card?.socials?.fb,
+          whatsapp: card?.socials?.whatsapp,
+        });
+    } else {
+      console.log("no car fetched!");
+    }
+  }, [card]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await createCard(user, {
-      fullName,
-      profession,
-      email,
-      contact,
-      location,
-      whatsapp: socials?.whatsapp,
-      fb: socials?.fb,
-      web: socials?.web,
-      file: profilePic,
-    });
+    {
+      await Create_or_Update_Card(user, {
+        fullName,
+        profession,
+        email,
+        contact,
+        location,
+        whatsapp: socials?.whatsapp,
+        fb: socials?.fb,
+        web: socials?.web,
+        file: profilePic,
+      });
+    }
   };
   return (
     <Card>
       <form onSubmit={handleSubmit}>
         <div className={styles.formContent}>
-          <h1>Create Card</h1>
+          <h1>{card?.uid ? "Update Card" : "Create Card"}</h1>
           <label>
             Full Name
             <div className={styles.input_cntr}>
@@ -195,7 +223,7 @@ export default function CreateCard() {
         </div>
         <button className={styles.submit_btn} type="submit">
           {" "}
-          Create
+          {card?.uid ? "Submit" : "Create"}
         </button>
       </form>
     </Card>
