@@ -59,7 +59,7 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  const fetchCard = useCallback(async (uid) => {
+  const fetchCard = async (uid) => {
     try {
       const q = await query(
         collection(db, "users"),
@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log("Card fetch miss>", error.message);
     }
-  }, []);
+  }
 
   const createCard = async (user, data) => {
     try {

@@ -15,11 +15,11 @@ import {
 import { useParams } from "react-router-dom";
 
 export default function DisplayCard() {
-  const { user, card, fetchCard } = useContext(AuthContext);
+  const { card, fetchCard } = useContext(AuthContext);
   const { id } = useParams();
   useEffect(() => {
     fetchCard(id);
-  }, [user, fetchCard]);
+  }, []);
 
   return (
     <Card>
