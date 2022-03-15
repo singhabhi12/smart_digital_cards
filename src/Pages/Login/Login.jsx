@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import styles from "./Login.module.scss";
 import close from "../../assets/close.svg";
 import mail from "../../assets/mail.svg";
@@ -6,7 +6,7 @@ import password from "../../assets/password.svg";
 import checkOn from "../../assets/checkOn.svg";
 import { useNavigate } from "react-router-dom";
 //FIREBASE @imports
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase-config";
 
 //TOASTIFY @imports
@@ -27,6 +27,14 @@ export default function Login() {
   const handleEmailInput = (event) => setEmail(event.target.value);
   const handlePwdInput = (event) => setPwd(event.target.value);
 
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      if (localStorage.getItem("user") === user?.uid) {
+        navigate("/profile");
+      }
+    }
+  }, [user]);
+
   //register user func
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,7 +42,9 @@ export default function Login() {
       try {
         await signInWithEmailAndPassword(auth, email, pwd);
         if (rememberUser) {
-          localStorage.setItem("user", user?.uid);
+          onAuthStateChanged(auth, (currentUser) => {
+            localStorage.setItem("user", currentUser.uid);
+          });
         }
         navigate("/profile");
       } catch (err) {
@@ -52,7 +62,6 @@ export default function Login() {
       }
     }
   };
-
   return (
     <div className={styles.login_page}>
       <div className={styles.container}>

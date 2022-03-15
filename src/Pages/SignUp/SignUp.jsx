@@ -1,9 +1,8 @@
-import { useContext, useState} from "react";
+import { useContext, useState, useEffect} from "react";
 import styles from "./SignUp.module.scss";
 import close from "../../assets/close.svg";
 import mail from "../../assets/mail.svg";
 import password from "../../assets/password.svg";
-import user from "../../assets/user2.svg";
 import checkOn from "../../assets/checkOn.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +30,15 @@ export default function SignUp() {
       await registerUser(username, email, pwd);
     }
   };
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      if (localStorage.getItem("user") === user?.uid) {
+        navigate("/profile");
+      }
+    }
+  }, [user]);
 
   return (
     <div className={styles.signup_page}>

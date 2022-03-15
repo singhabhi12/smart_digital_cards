@@ -1,4 +1,3 @@
-import Layout from "../../Layouts/Layout";
 import styles from "./Landing.module.scss";
 import cards from "../../assets/cards.svg";
 import { useNavigate } from "react-router-dom";
