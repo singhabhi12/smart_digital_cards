@@ -49,6 +49,30 @@
           line-height: 16px;
           margin-top: 0.2rem;
         }
+        .file_input {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        .file {
+          opacity: 0;
+          width: 0.1px;
+          height: 0.1px;
+          position: absolute;
+        }
+        .uploadBtnText {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid;
+          border-radius: 20px;
+          padding: 0.25rem;
+          width: 110px;
+
+          img{
+              margin:0 .25rem;
+          }
+        }
+      } 
         .input_cntr {
           margin-top: 1.25rem;
           display: flex;

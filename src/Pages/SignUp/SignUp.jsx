@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect} from "react";
+import { useContext, useState, useEffect } from "react";
 import styles from "./SignUp.module.scss";
 import close from "../../assets/close.svg";
 import mail from "../../assets/mail.svg";
@@ -7,6 +7,7 @@ import checkOn from "../../assets/checkOn.svg";
 import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../Helper/Context";
+import { imgIcon, userIcon } from "../../assets/getAssests";
 
 export default function SignUp() {
   const navigate = useNavigate(); //to navigate b/w pages
@@ -14,6 +15,7 @@ export default function SignUp() {
   //form states
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [pwd, setPwd] = useState("");
 
   //handlers functions
@@ -27,7 +29,7 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (email !== "" && pwd !== "") {
-      await registerUser(username, email, pwd);
+      await registerUser(username, email, pwd, profilePic);
     }
   };
   const { user } = useContext(AuthContext);
@@ -69,7 +71,7 @@ export default function SignUp() {
             <label>
               Name
               <div className={styles.input_cntr}>
-                <img src={user} alt="icon" />
+                <img src={userIcon} alt="icon" />
                 <input
                   type="text"
                   value={username}
@@ -77,6 +79,24 @@ export default function SignUp() {
                   placeholder="Richard Hendricks"
                   required
                 />
+              </div>
+            </label>
+
+            <label>
+              <div className={styles.file_input}>
+                <span>Upload your profile picture</span>
+                <input
+                  type="file"
+                  className={styles.file}
+                  name="avatar"
+                  accept="image/png, image/jpeg"
+                  onChange={(event) => setProfilePic(event.target.files[0])}
+                  required
+                />
+                <span className={styles.uploadBtnText}>
+                  {" "}
+                  <img src={imgIcon} alt="image_icon" /> Upload
+                </span>
               </div>
             </label>
 

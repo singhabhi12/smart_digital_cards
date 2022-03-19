@@ -7,6 +7,9 @@ import whatsAppIcon from "./whatsappIcon.svg";
 import fbIcon from "./fbIcon.svg";
 import sendIcon from "./send.svg";
 import saveCardIcon from "./savecard_icon2.svg";
+import userIcon from "./user2.svg";
+import editIcon from './edit.svg'
+import tapCardIcon from './tapCard.svg'
 export {
   locIcon,
   mail2Icon,
@@ -17,4 +20,7 @@ export {
   fbIcon,
   saveCardIcon,
   sendIcon,
+  userIcon,
+  editIcon,
+  tapCardIcon
 };

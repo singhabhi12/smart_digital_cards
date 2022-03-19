@@ -10,13 +10,7 @@ import {
 } from "../../assets/getAssests";
 
 import styles from "./CreateCard.module.scss";
-import {
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-  useLayoutEffect,
-} from "react";
+import { useEffect, useState, useContext, useLayoutEffect } from "react";
 import { AuthContext } from "../../Helper/Context";
 import { useNavigate } from "react-router-dom";
 
@@ -41,11 +35,11 @@ export default function CreateCard() {
   useLayoutEffect(() => {
     if (!user) navigate("/");
     fetchCard(user?.uid);
-  }, [user, fetchCard]);
+  }, [user]);
 
   useEffect(() => {
     if (card?.uid) {
-      console.log("no car fetched!");
+      console.log("no card fetched!");
       card?.fullname && setFullName(card?.fullname);
       card?.profession && setProfession(card?.profession);
       card?.email && setEmail(card?.email);
@@ -58,7 +52,7 @@ export default function CreateCard() {
           whatsapp: card?.socials?.whatsapp,
         });
     } else {
-      console.log("no car fetched!");
+      console.log("no card fetched!");
     }
   }, [card]);
 

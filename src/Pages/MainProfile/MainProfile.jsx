@@ -27,8 +27,7 @@ const UtilityCard = ({ data }) => {
 };
 
 export default function MainProfile() {
-  const navigate = useNavigate(null);
-  const { user } = useContext(AuthContext);
+  const { user, setUser, card, setCard, navigate } = useContext(AuthContext);
 
   useEffect(() => {
     if (!user) navigate("/");
@@ -46,11 +45,6 @@ export default function MainProfile() {
     },
     {
       icon: edit_icon,
-      info: "Create Card",
-      redirect: "/create-card",
-    },
-    {
-      icon: edit_icon,
       info: "Update NFC Card",
       redirect: "",
     },
@@ -58,6 +52,8 @@ export default function MainProfile() {
 
   const logout = async () => {
     await signOut(auth);
+    setUser({});
+    setCard({});
     window.localStorage.clear();
     navigate("/");
   };
@@ -73,7 +69,7 @@ export default function MainProfile() {
         <div className={styles.body}>
           <div className={styles.profile}>
             <img
-              src={ducky}
+              src={user?.photoURL ? user?.photoURL : ducky}
               alt="profile_image"
               className={styles.profile_img}
             />
@@ -87,6 +83,16 @@ export default function MainProfile() {
           </div>
 
           <div className={styles.profile_utilities}>
+            <div
+              className={styles.utility}
+              onClick={() => navigate("/create-card")}
+            >
+              <img src={edit_icon} alt="icon" className={styles.utility_icon} />
+              <p className={styles.utility_info}>
+                {card?.uid ? "Update Card" : "Create Card"}
+              </p>
+            </div>
+
             {utilities.map((util, idx) => {
               return <UtilityCard data={util} key={idx} />;
             })}
@@ -94,11 +100,17 @@ export default function MainProfile() {
 
           <div className={styles.profile_share}>
             <div className={styles.pofile_btns}>
-              <button className={styles.send_profile}>
+              <button
+                className={styles.send_profile}
+                onClick={() => navigate("/send-card")}
+              >
                 <img src={send_icon} alt="send_icon" />
                 {/* <span>Send Card</span> */}
               </button>
-              <button className={styles.receive_profile}>
+              <button
+                className={styles.receive_profile}
+                onClick={() => navigate("/receive-card")}
+              >
                 <img src={barcode_icon} alt="barcode_icon" />
                 {/* <span>Receive Card</span> */}
               </button>

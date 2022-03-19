@@ -27,10 +27,6 @@ const AuthProvider = ({ children }) => {
   const [card, setCard] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getUser();
-  }, []);
-
   //firebase helper methdods
   async function getUser() {
     try {
@@ -43,12 +39,20 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  async function registerUser(username, email, pwd) {
+  async function registerUser(username, email, pwd, profilePic) {
     try {
+      //upload img to firestorage logic
+      const imageRef = ref(storage, `images/${profilePic.name}`);
+      const snapshot = await uploadBytes(imageRef, profilePic);
+      const downloadUrl = await getDownloadURL(imageRef);
+      console.log("File uploaded> Snapshot:", snapshot);
+
       await createUserWithEmailAndPassword(auth, email, pwd);
+
       //Setting user's display name
       await updateProfile(auth.currentUser, {
         displayName: username,
+        photoURL: downloadUrl,
       });
       navigate("/login");
     } catch (err) {
@@ -118,14 +122,22 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    getUser();
+    fetchCard(user?.uid);
+  }, [user]);
+
   return (
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         registerUser,
         Create_or_Update_Card,
         fetchCard,
         card,
+        setCard,
+        navigate,
       }}
     >
       {children}
