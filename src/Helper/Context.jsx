@@ -25,6 +25,7 @@ export const AuthContext = createContext({});
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [card, setCard] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   //firebase helper methdods
@@ -40,6 +41,7 @@ const AuthProvider = ({ children }) => {
   }
 
   async function registerUser(username, email, pwd, profilePic) {
+    setLoading(true);
     try {
       //upload img to firestorage logic
       const imageRef = ref(storage, `images/${profilePic.name}`);
@@ -48,12 +50,12 @@ const AuthProvider = ({ children }) => {
       console.log("File uploaded> Snapshot:", snapshot);
 
       await createUserWithEmailAndPassword(auth, email, pwd);
-
       //Setting user's display name
       await updateProfile(auth.currentUser, {
         displayName: username,
         photoURL: downloadUrl,
       });
+      setLoading(false);
       navigate("/login");
     } catch (err) {
       console.error(err.message);
@@ -67,6 +69,7 @@ const AuthProvider = ({ children }) => {
         progress: undefined,
         theme: "colored",
       });
+      setLoading(false);
     }
   }
 
@@ -138,6 +141,8 @@ const AuthProvider = ({ children }) => {
         card,
         setCard,
         navigate,
+        loading,
+        setLoading,
       }}
     >
       {children}

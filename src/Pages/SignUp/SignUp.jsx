@@ -9,13 +9,18 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Helper/Context";
 import { imgIcon, userIcon } from "../../assets/getAssests";
 
+//TOASTIFY @imports
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "../../Components/Loader/Loader";
+
 export default function SignUp() {
   const navigate = useNavigate(); //to navigate b/w pages
 
   //form states
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [profilePic, setProfilePic] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
   const [pwd, setPwd] = useState("");
 
   //handlers functions
@@ -23,13 +28,26 @@ export default function SignUp() {
   const handleUsernameInput = (event) => setUsername(event.target.value);
   const handlePwdInput = (event) => setPwd(event.target.value);
 
-  const { registerUser } = useContext(AuthContext);
+  const { registerUser, loading } = useContext(AuthContext);
 
   //register user func
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (email !== "" && pwd !== "") {
+
+    if (email !== "" && pwd !== "" && profilePic !== null) {
       await registerUser(username, email, pwd, profilePic);
+      console.log("profile pic:", profilePic);
+    } else {
+      toast.info("Pls upload your profile picture!", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
   const { user } = useContext(AuthContext);
@@ -91,7 +109,6 @@ export default function SignUp() {
                   name="avatar"
                   accept="image/png, image/jpeg"
                   onChange={(event) => setProfilePic(event.target.files[0])}
-                  required
                 />
                 <span className={styles.uploadBtnText}>
                   {" "}
@@ -132,6 +149,7 @@ export default function SignUp() {
           </form>
         </div>
       </div>
+      {loading && <Loader />}
     </div>
   );
 }

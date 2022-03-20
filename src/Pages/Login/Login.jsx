@@ -5,6 +5,7 @@ import mail from "../../assets/mail.svg";
 import password from "../../assets/password.svg";
 import checkOn from "../../assets/checkOn.svg";
 import { useNavigate } from "react-router-dom";
+
 //FIREBASE @imports
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase-config";
@@ -13,6 +14,7 @@ import { auth } from "../../firebase-config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../Helper/Context";
+import Loader from "../../Components/Loader/Loader";
 
 export default function Login() {
   const navigate = useNavigate(); //to navigate b/w pages
@@ -20,7 +22,7 @@ export default function Login() {
   //form states
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  const { user } = useContext(AuthContext);
+  const { user, loading, setLoading } = useContext(AuthContext);
   const [rememberUser, setRememberStatus] = useState(false);
 
   //handlers functions
@@ -39,6 +41,7 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (email !== "" && pwd !== "") {
+      setLoading(true);
       try {
         await signInWithEmailAndPassword(auth, email, pwd);
         if (rememberUser) {
@@ -47,6 +50,7 @@ export default function Login() {
           });
         }
         navigate("/profile");
+        setLoading(false);
       } catch (err) {
         console.error(err.message);
         toast.error("User Invalid / Not Registered!", {
@@ -59,6 +63,7 @@ export default function Login() {
           progress: undefined,
           theme: "colored",
         });
+        setLoading(false);
       }
     }
   };
@@ -137,6 +142,7 @@ export default function Login() {
           pauseOnHover
         />
       </div>
+      {loading && <Loader />}
     </div>
   );
 }
