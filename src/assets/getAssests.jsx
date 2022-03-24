@@ -11,6 +11,7 @@ import userIcon from "./user2.svg";
 import editIcon from "./edit.svg";
 import tapCardIcon from "./tapCard.svg";
 import loaderGif from "./loader.svg";
+import scannerGif from "./scannerGif.svg";
 export {
   locIcon,
   mail2Icon,
@@ -24,5 +25,6 @@ export {
   userIcon,
   editIcon,
   tapCardIcon,
-  loaderGif
+  loaderGif,
+  scannerGif,
 };

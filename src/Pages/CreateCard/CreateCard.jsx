@@ -13,6 +13,7 @@ import styles from "./CreateCard.module.scss";
 import { useEffect, useState, useContext, useLayoutEffect } from "react";
 import { AuthContext } from "../../Helper/Context";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../Components/Loader/Loader";
 
 export default function CreateCard() {
   //form states
@@ -29,7 +30,7 @@ export default function CreateCard() {
   const [profilePic, setProfilePic] = useState("");
 
   const navigate = useNavigate();
-  const { user, Create_or_Update_Card, card, fetchCard } =
+  const { user, Create_or_Update_Card, card, fetchCard, loading } =
     useContext(AuthContext);
 
   useLayoutEffect(() => {
@@ -220,6 +221,7 @@ export default function CreateCard() {
           {card?.uid ? "Submit" : "Create"}
         </button>
       </form>
+      {loading && <Loader />}
     </Card>
   );
 }

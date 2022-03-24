@@ -33,7 +33,6 @@ export default function SignUp() {
   //register user func
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (email !== "" && pwd !== "" && profilePic !== null) {
       await registerUser(username, email, pwd, profilePic);
       console.log("profile pic:", profilePic);
@@ -53,12 +52,23 @@ export default function SignUp() {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      if (localStorage.getItem("user") === user?.uid) {
-        navigate("/profile");
-      }
+    if (localStorage.getItem("user") === user?.uid || user?.uid) {
+      navigate("/profile");
     }
-  }, [user]);
+
+    if (profilePic !== null) {
+      toast.success(`${profilePic.name} is selected as profile pic!`, {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }, [user, profilePic]);
 
   return (
     <div className={styles.signup_page}>

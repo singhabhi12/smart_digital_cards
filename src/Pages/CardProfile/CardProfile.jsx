@@ -1,21 +1,17 @@
 import React, { useContext, useEffect } from "react";
-import styles from "./YourCard.module.scss";
+import styles from "./CardProfile.module.scss";
 import { AuthContext } from "../../Helper/Context";
 import Card from "../../Layouts/Layout";
 
 import { sendIcon, saveCardIcon, editIcon } from "../../assets/getAssests";
 import ProfileCard from "../../Components/ProfileCard/ProfileCard";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-export default function YourCard() {
-  const navigate = useNavigate();
-  const { card, fetchCard } = useContext(AuthContext);
+export default function CardProfile() {
+  const { card, fetchCard, navigate } = useContext(AuthContext);
+  const { id } = useParams();
   useEffect(() => {
-    if (!card?.uid) {
-      alert("create card first!");
-      navigate("/profile");
-    }
-    fetchCard();
+    fetchCard(id);
   }, []);
 
   return (
@@ -25,10 +21,10 @@ export default function YourCard() {
 
         <button
           className={styles.editCardBtn}
-          onClick={() => navigate("/create-card")}
+          onClick={() => alert("card deleted!")}
         >
           <img src={editIcon} alt="savecard_icon" />
-          <span>Edit Card</span>
+          <span>Delete Card</span>
         </button>
       </div>
     </Card>

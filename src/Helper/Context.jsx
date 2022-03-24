@@ -25,7 +25,12 @@ export const AuthContext = createContext({});
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [card, setCard] = useState({});
+  const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [actions, setActions] = useState({
+    scan: null,
+    write: null,
+  });
   const navigate = useNavigate();
 
   //firebase helper methdods
@@ -39,6 +44,28 @@ const AuthProvider = ({ children }) => {
       console.log(err.message);
     }
   }
+  const SavedCards = async (user) => {
+    console.log("saved card db initiated!");
+    try {
+      //add info to db logic
+      await setDoc(doc(db, "savedcards", user?.uid), {
+        user: user?.uid,
+        cards: [],
+      });
+    } catch (err) {
+      console.log("saved card err:", err);
+      toast.error("Invalid Response!", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
 
   async function registerUser(username, email, pwd, profilePic) {
     setLoading(true);
@@ -55,6 +82,7 @@ const AuthProvider = ({ children }) => {
         displayName: username,
         photoURL: downloadUrl,
       });
+      await SavedCards(auth.currentUser);
       setLoading(false);
       navigate("/login");
     } catch (err) {
@@ -73,22 +101,53 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  const fetchCard = useCallback(async (uid) => {
+  const fetchCard = useCallback(
+    async (profile_id) => {
+      try {
+        const q = await query(
+          collection(db, "users"),
+          where("uid", "==", profile_id ? profile_id : user.uid)
+        );
+        const querySnapshot = await getDocs(q);
+        await querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log("Card fetched 🔥 =>", doc.data());
+          setCard(doc.data());
+        });
+      } catch (error) {
+        console.log("Card fetch miss>", error.message);
+      }
+    },
+    [user]
+  );
+
+  const fetchSavedProfiles = useCallback(async () => {
+    let tmp = [];
     try {
-      const q = await query(collection(db, "users"), where("uid", "==", uid));
+      const q = await query(
+        collection(db, "savedcards"),
+        where("user", "==", user?.uid)
+      );
       const querySnapshot = await getDocs(q);
       await querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log("Card fetched 🔥 =>", doc.data());
-        setCard(doc.data());
+        doc.data().cards.map((card) => {
+          const q = query(collection(db, "users"), where("uid", "==", card));
+          getDocs(q).then((res) => {
+            res.docs.map((doc) => {
+              tmp.push(doc.data());
+            });
+            setProfiles(tmp);
+          });
+        });
       });
     } catch (error) {
       console.log("Card fetch miss>", error.message);
     }
-  }, []);
+  }, [user]);
 
   //resource: https://firebase.google.com/docs/firestore/manage-data/add-data#set_a_document
   const Create_or_Update_Card = async (user, data) => {
+    setLoading(true);
     try {
       //upload img to firestorage logic
       const imageRef = ref(storage, `images/${data.file.name}`);
@@ -110,8 +169,10 @@ const AuthProvider = ({ children }) => {
 
       console.log("Card Created 🔥");
       navigate(`/card/${user.uid}`);
+      setLoading(false);
     } catch (err) {
       console.error(err);
+      setLoading(false);
       toast.error("Invalid Response!", {
         position: "top-center",
         autoClose: 1500,
@@ -127,7 +188,8 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     getUser();
-    fetchCard(user?.uid);
+    fetchCard();
+    fetchSavedProfiles();
   }, [user]);
 
   return (
@@ -138,11 +200,15 @@ const AuthProvider = ({ children }) => {
         registerUser,
         Create_or_Update_Card,
         fetchCard,
+        fetchSavedProfiles,
         card,
         setCard,
         navigate,
         loading,
         setLoading,
+        actions,
+        setActions,
+        profiles,
       }}
     >
       {children}

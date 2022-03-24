@@ -9,10 +9,8 @@ export default function Landing() {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      if (localStorage.getItem("user") === user?.uid) {
-        navigate("/profile");
-      }
+    if (localStorage.getItem("user") === user?.uid || user?.uid) {
+      navigate("/profile");
     }
   }, [user]);
   return (

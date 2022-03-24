@@ -30,10 +30,8 @@ export default function Login() {
   const handlePwdInput = (event) => setPwd(event.target.value);
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
-      if (localStorage.getItem("user") === user?.uid) {
-        navigate("/profile");
-      }
+    if (localStorage.getItem("user") === user?.uid || user?.uid) {
+      navigate("/profile");
     }
   }, [user]);
 

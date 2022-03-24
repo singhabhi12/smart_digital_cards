@@ -1,0 +1,48 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+
+  h1 {
+    margin: 1.2rem 0;
+    font-size: 1.75rem;
+    text-align: left;
+    @media screen and (min-width: 40em) {
+      text-align: center;
+    }
+  }
+  .card {
+    border: 1px solid;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 327px;
+    max-width: 450px;
+    padding: 1rem;
+    margin: 1.5rem auto;
+    border-radius: 18px;
+    gap: 1rem;
+    box-shadow: -4px 4px 4px 2px rgba(0, 0, 0, 0.25);
+
+    img {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+
+      &:nth-of-type(2) {
+        width: initial;
+        height: initial;
+        cursor: pointer;
+        border-radius: initial;
+      }
+    }
+    .info {
+      text-align: left;
+
+      span {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}

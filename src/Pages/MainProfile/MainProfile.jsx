@@ -34,14 +34,9 @@ export default function MainProfile() {
   }, [user]);
   const utilities = [
     {
-      icon: user_icon,
-      info: "Your Business Card",
-      redirect: `/card/${user?.uid}`,
-    },
-    {
       icon: savecard_icon,
       info: "Saved Business Card",
-      redirect: "",
+      redirect: "/saved-cards",
     },
     {
       icon: edit_icon,
@@ -92,6 +87,16 @@ export default function MainProfile() {
                 {card?.uid ? "Update Card" : "Create Card"}
               </p>
             </div>
+            {card?.uid && (
+              <div className={styles.utility} onClick={() => navigate("/card")}>
+                <img
+                  src={user_icon}
+                  alt="icon"
+                  className={styles.utility_icon}
+                />
+                <p className={styles.utility_info}>Your Business Card</p>
+              </div>
+            )}
 
             {utilities.map((util, idx) => {
               return <UtilityCard data={util} key={idx} />;
