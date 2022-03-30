@@ -1,26 +1,32 @@
 import Card from "../../Layouts/Layout";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./WriteCard.module.scss";
 import { AuthContext } from "../../Helper/Context";
-import WriteNfcCard from "../../Components/Write/Write";
 
 export default function WriteCard() {
-  const { actions, setActions } = useContext(AuthContext);
-
-  const scan = () => {
-    //for now lets just keep outside the scope!
-    setActions({
-      scan: "scanned",
-      write: "writing",
-    });
+  const { user } = useContext(AuthContext);
+  const onWrite = async (message) => {
+    console.log("mssg:", message);
     if ("NDEFReader" in window) {
-      //to check for nfc reader support
-      //if yes -> allow write
+      try {
+        const ndef = new window.NDEFReader();
+        // This line will avoid showing the native NFC UI reader
+        await ndef.scan();
+        await ndef.write({ records: [{ recordType: "url", data: message }] });
+        alert(`Profile saved to your NFC card!`);
+      } catch (error) {
+        console.log(error);
+        alert(`Something went wrong!`);
+      }
     }
   };
 
-  return !actions.write ? (
+  useEffect(() => {
+    if (user?.uid) onWrite(`https://fir-9-be.web.app/profile/${user.uid}`);
+  }, [user]);
+
+  return (
     <Card>
       <div className={styles.container}>
         <h1>
@@ -29,7 +35,7 @@ export default function WriteCard() {
           back of your device to write.
         </h1>
 
-        <div className={styles.tapDeviceIcon} onClick={scan}>
+        <div className={styles.tapDeviceIcon}>
           <span>Tap Device</span>
         </div>
 
@@ -40,7 +46,5 @@ export default function WriteCard() {
         </p>
       </div>
     </Card>
-  ) : (
-    <WriteNfcCard />
   );
 }

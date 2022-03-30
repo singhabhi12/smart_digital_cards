@@ -29,10 +29,6 @@ const AuthProvider = ({ children }) => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [actions, setActions] = useState({
-    scan: null,
-    write: null,
-  });
   const navigate = useNavigate();
 
   //firebase helper methdods
@@ -315,8 +311,6 @@ const AuthProvider = ({ children }) => {
         navigate,
         loading,
         setLoading,
-        actions,
-        setActions,
         profiles,
         DeleteSavedProfile,
         SaveProfile,

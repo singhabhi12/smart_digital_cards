@@ -1,18 +1,15 @@
 import Card from "../../Layouts/Layout";
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./ScanCard.module.scss";
-import { AuthContext } from "../../Helper/Context";
-import { scannerGif } from "../../assets/getAssests";
 import { useNavigate } from "react-router-dom";
 
 export default function ScanCard() {
   const [message, setMessage] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
-  const { actions, setActions } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const scan = useCallback(async () => {
+  const scan = async () => {
     if ("NDEFReader" in window) {
       try {
         const ndef = new window.NDEFReader();
@@ -31,19 +28,18 @@ export default function ScanCard() {
         console.log(`Error! Scan failed to start: ${error}.`);
       }
     }
-  }, []);
+  };
 
   const onReading = ({ message, serialNumber }) => {
     setSerialNumber(serialNumber);
     for (const record of message.records) {
       switch (record.recordType) {
         case "text":
-          const textDecoder = new TextDecoder(record.encoding);
-          setMessage(textDecoder.decode(record.data));
+          //incase of txt mssg
           break;
         case "url":
-          const textDecoder2 = new TextDecoder(record.encoding);
-          setMessage(textDecoder2.decode(record.data));
+          const textDecoder = new TextDecoder(record.encoding);
+          setMessage(textDecoder.decode(record.data));
           navigate(message);
           break;
         default:
@@ -53,7 +49,6 @@ export default function ScanCard() {
   };
 
   useEffect(() => {
-    setActions({ scan: null, write: null });
     console.log({ message, serialNumber });
     scan();
   }, [scan]);
