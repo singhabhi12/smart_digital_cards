@@ -4,11 +4,13 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import styles from "./ScanCard.module.scss";
 import { AuthContext } from "../../Helper/Context";
 import { scannerGif } from "../../assets/getAssests";
+import { useNavigate } from "react-router-dom";
 
 export default function ScanCard() {
   const [message, setMessage] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const { actions, setActions } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const scan = useCallback(async () => {
     if ("NDEFReader" in window) {
@@ -24,16 +26,12 @@ export default function ScanCard() {
         ndef.onreading = (event) => {
           console.log("NDEF message read.");
           onReading(event);
-          setActions({
-            scan: "scanned",
-            write: null,
-          });
         };
       } catch (error) {
         console.log(`Error! Scan failed to start: ${error}.`);
       }
     }
-  }, [setActions]);
+  }, []);
 
   const onReading = ({ message, serialNumber }) => {
     setSerialNumber(serialNumber);
@@ -46,6 +44,7 @@ export default function ScanCard() {
         case "url":
           const textDecoder2 = new TextDecoder(record.encoding);
           setMessage(textDecoder2.decode(record.data));
+          navigate(message);
           break;
         default:
         // TODO: Handle other records with record data.
@@ -67,23 +66,8 @@ export default function ScanCard() {
           <br /> Business Card
         </h1>
 
-        <div
-          className={styles.tapDeviceIcon}
-          onClick={() =>
-            actions.scan === "scanning"
-              ? setActions({ scan: null, write: null })
-              : setActions({ write: null, scan: "scanning" })
-          }
-        >
-          {actions.scan === "scanning" ? (
-            <img
-              src={scannerGif}
-              alt="scan logo"
-              className={styles.scanner_image}
-            />
-          ) : (
-            <span>Tap Device</span>
-          )}
+        <div className={styles.tapDeviceIcon}>
+          <span>Tap Device</span>
         </div>
 
         <p>

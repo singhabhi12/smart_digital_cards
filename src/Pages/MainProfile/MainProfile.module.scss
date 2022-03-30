@@ -36,6 +36,8 @@
         width: 96px;
         height: 96px;
         border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
       }
       .profile_info {
         text-align: left;

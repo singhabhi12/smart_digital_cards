@@ -41,8 +41,8 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    min-width: 327px;
-    max-width: 450px;
+    min-width: 300px;
+    max-width: 400px;
     padding: 1rem;
     margin: 1.5rem auto;
     border-radius: 18px;
@@ -53,6 +53,8 @@
       width: 65px;
       height: 65px;
       border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
 
       &:nth-of-type(2) {
         width: initial;
@@ -63,9 +65,11 @@
     }
     .info {
       text-align: left;
-
+      h4 {
+        font-size: 1.1rem;
+      }
       span {
-        font-size: 0.8rem;
+        font-size: 1rem;
       }
     }
   }
