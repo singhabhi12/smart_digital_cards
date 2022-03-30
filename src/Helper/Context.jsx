@@ -10,6 +10,7 @@ import {
   where,
   doc,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
@@ -27,6 +28,7 @@ const AuthProvider = ({ children }) => {
   const [card, setCard] = useState({});
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [actions, setActions] = useState({
     scan: null,
     write: null,
@@ -102,11 +104,12 @@ const AuthProvider = ({ children }) => {
   }
 
   const fetchCard = useCallback(
-    async (profile_id) => {
+    async (profile_id = user?.uid) => {
+      console.log("profile id:", profile_id);
       try {
         const q = await query(
           collection(db, "users"),
-          where("uid", "==", profile_id ? profile_id : user.uid)
+          where("uid", "==", profile_id)
         );
         const querySnapshot = await getDocs(q);
         await querySnapshot.forEach((doc) => {
@@ -121,6 +124,98 @@ const AuthProvider = ({ children }) => {
     [user]
   );
 
+  const SaveProfile = async (profileId) => {
+    let tmp = [];
+    console.log(profileId);
+    try {
+      const q = await query(
+        collection(db, "savedcards"),
+        where("user", "==", user?.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      await querySnapshot.forEach((doc) => {
+        console.log("saved cards:", doc.data().cards);
+        tmp = doc.data().cards;
+        if (!tmp.includes(profileId)) {
+          tmp.push(profileId);
+          toast.success(`Profile Added Successfully!`, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        } else {
+          toast.error(`User already added!`, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      });
+      await setDoc(doc(db, "savedcards", user?.uid), {
+        user: user?.uid,
+        cards: tmp,
+      });
+      navigate("/saved-cards");
+      window.location.reload();
+    } catch (error) {
+      toast.error(`User doesn't exist! / Aleready added!`, {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      console.log("err:", error);
+    }
+  };
+
+  const DeleteSavedProfile = async (profileId) => {
+    let tmp = [];
+    try {
+      const q = await query(
+        collection(db, "savedcards"),
+        where("user", "==", user?.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      await querySnapshot.forEach((doc) => {
+        console.log("saved cards:", doc.data().cards);
+        tmp = doc.data().cards.filter((card) => card !== profileId);
+      });
+      await setDoc(doc(db, "savedcards", user?.uid), {
+        user: user?.uid,
+        cards: tmp,
+      });
+      setProfiles(tmp);
+      navigate("/profile");
+      toast.error(`User: ${profileId} deleted !`, {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error) {
+      console.log("err:", error);
+    }
+  };
   const fetchSavedProfiles = useCallback(async () => {
     let tmp = [];
     try {
@@ -143,32 +238,47 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log("Card fetch miss>", error.message);
     }
-  }, [user]);
+  }, [user, profiles]);
 
   //resource: https://firebase.google.com/docs/firestore/manage-data/add-data#set_a_document
   const Create_or_Update_Card = async (user, data) => {
     setLoading(true);
     try {
-      //upload img to firestorage logic
-      const imageRef = ref(storage, `images/${data.file.name}`);
-      const snapshot = await uploadBytes(imageRef, data.file);
-      const downloadUrl = await getDownloadURL(imageRef);
-      console.log("File uploaded> Snapshot:", snapshot);
+      if (data.file) {
+        console.log("profile pic available!", data.file);
+        //upload img to firestorage logic
+        const imageRef = ref(storage, `images/${data.file.name}`);
+        const snapshot = await uploadBytes(imageRef, data.file);
+        const downloadUrl = await getDownloadURL(imageRef);
+        console.log("File uploaded> Snapshot:", snapshot);
 
-      //add info to db logic
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        fullname: data.fullName,
-        profession: data.profession,
-        email: data.email,
-        contact: data.contact,
-        location: data.location,
-        socials: { whatsapp: data.whatsapp, fb: data.fb, web: data.web },
-        profilePic: downloadUrl,
-      });
+        //add info to db logic
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          fullname: data.fullName,
+          profession: data.profession,
+          email: data.email,
+          contact: data.contact,
+          location: data.location,
+          socials: { whatsapp: data.whatsapp, fb: data.fb, web: data.web },
+          profilePic: downloadUrl,
+        });
+      } else {
+        console.log("profile pic not-available!", data.file);
+        //add info to db logic
+        await updateDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          fullname: data.fullName,
+          profession: data.profession,
+          email: data.email,
+          contact: data.contact,
+          location: data.location,
+          socials: { whatsapp: data.whatsapp, fb: data.fb, web: data.web },
+        });
+      }
 
       console.log("Card Created 🔥");
-      navigate(`/card/${user.uid}`);
+      navigate(`/card`);
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -188,7 +298,6 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     getUser();
-    fetchCard();
     fetchSavedProfiles();
   }, [user]);
 
@@ -209,6 +318,10 @@ const AuthProvider = ({ children }) => {
         actions,
         setActions,
         profiles,
+        DeleteSavedProfile,
+        SaveProfile,
+        setShowAlert,
+        showAlert,
       }}
     >
       {children}

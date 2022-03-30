@@ -14,6 +14,9 @@ import { useEffect, useState, useContext, useLayoutEffect } from "react";
 import { AuthContext } from "../../Helper/Context";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Components/Loader/Loader";
+//TOASTIFY @imports
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateCard() {
   //form states
@@ -55,7 +58,19 @@ export default function CreateCard() {
     } else {
       console.log("no card fetched!");
     }
-  }, [card]);
+    if (profilePic) {
+      toast.success(`${profilePic.name} is selected!`, {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }, [card,profilePic]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -169,7 +184,6 @@ export default function CreateCard() {
                 name="avatar"
                 accept="image/png, image/jpeg"
                 onChange={(event) => setProfilePic(event.target.files[0])}
-                required
               />
               <span className={styles.uploadBtnText}>
                 {" "}
@@ -222,6 +236,17 @@ export default function CreateCard() {
         </button>
       </form>
       {loading && <Loader />}
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Card>
   );
 }

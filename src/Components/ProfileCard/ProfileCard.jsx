@@ -8,6 +8,7 @@ import {
   webIcon,
   whatsAppIcon,
   fbIcon,
+  placeholder,
 } from "../../assets/getAssests";
 
 export default function ProfileCard({ card }) {
@@ -15,7 +16,7 @@ export default function ProfileCard({ card }) {
     <div className={styles.profile}>
       <div className={styles.profile_intro}>
         <img
-          src={card?.profilePic}
+          src={card?.profilePic ? card?.profilePic : placeholder}
           alt="profile_image"
           className={styles.profile_img}
         />

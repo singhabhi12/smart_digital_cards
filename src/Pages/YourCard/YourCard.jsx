@@ -9,14 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function YourCard() {
   const navigate = useNavigate();
-  const { card, fetchCard } = useContext(AuthContext);
+  const { user, card, fetchCard } = useContext(AuthContext);
   useEffect(() => {
-    if (!card?.uid) {
-      alert("create card first!");
-      navigate("/profile");
-    }
-    fetchCard();
-  }, []);
+    console.log("card", card);
+    fetchCard(user?.uid);
+  }, [user]);
 
   return (
     <Card>

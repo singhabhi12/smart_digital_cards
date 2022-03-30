@@ -3,16 +3,18 @@ import styles from "./CardProfile.module.scss";
 import { AuthContext } from "../../Helper/Context";
 import Card from "../../Layouts/Layout";
 
-import { sendIcon, saveCardIcon, editIcon } from "../../assets/getAssests";
 import ProfileCard from "../../Components/ProfileCard/ProfileCard";
 import { useParams } from "react-router-dom";
+import Toast from "../../Components/Toast/Toast";
 
 export default function CardProfile() {
-  const { card, fetchCard, navigate } = useContext(AuthContext);
+  const { card, fetchCard, DeleteSavedProfile, showAlert, setShowAlert } =
+    useContext(AuthContext);
   const { id } = useParams();
   useEffect(() => {
     fetchCard(id);
-  }, []);
+    console.log("id:", id);
+  }, [id]);
 
   return (
     <Card>
@@ -21,12 +23,19 @@ export default function CardProfile() {
 
         <button
           className={styles.editCardBtn}
-          onClick={() => alert("card deleted!")}
+          onClick={() => setShowAlert(true)}
         >
-          <img src={editIcon} alt="savecard_icon" />
           <span>Delete Card</span>
         </button>
       </div>
+      {showAlert && (
+        <Toast
+          data={{
+            info: "Are you sure you want to delete this contact ?",
+            action: () => DeleteSavedProfile(id),
+          }}
+        />
+      )}
     </Card>
   );
 }

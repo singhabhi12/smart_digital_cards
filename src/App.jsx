@@ -11,6 +11,7 @@ import ScanCard from "./Pages/ScanCard/ScanCard";
 import WriteCard from "./Pages/WriteCard/WriteCard";
 import SavedCard from "./Pages/SavedCard/SavedCard";
 import CardProfile from "./Pages/CardProfile/CardProfile";
+import BusinessCard from "./Pages/BusinessCard/BusinessCard";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/create-card" element={<CreateCard />} />
           <Route path="/card" element={<YourCard />} />
           <Route path="/card/:id" element={<CardProfile />} />
+          <Route path="/profile/:id" element={<BusinessCard />} />
           <Route path="/scan-card" element={<ScanCard />} />
           <Route path="/write-card" element={<WriteCard />} />
           <Route path="/saved-cards" element={<SavedCard />} />

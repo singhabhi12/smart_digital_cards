@@ -13,7 +13,7 @@ export default function WriteNfcCard() {
         const ndef = new window.NDEFReader();
         // This line will avoid showing the native NFC UI reader
         await ndef.scan();
-        await ndef.write({ records: [{ recordType: "text", data: message }] });
+        await ndef.write({ records: [{ recordType: "url", data: message }] });
         alert(`Value Saved!`);
       } catch (error) {
         console.log(error);
@@ -29,7 +29,13 @@ export default function WriteNfcCard() {
         <div className={styles.uidInput}>
           <p>Your UID</p>
           <input type="text" value={user?.uid} disabled />
-          <button onClick={() => onWrite(user?.uid)}>Submit</button>
+          <button
+            onClick={() =>
+              onWrite(`https://fir-9-be.web.app/profile/${user?.uid}`)
+            }
+          >
+            Submit
+          </button>
         </div>
       </div>
     </Card>

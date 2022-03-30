@@ -12,6 +12,7 @@ import editIcon from "./edit.svg";
 import tapCardIcon from "./tapCard.svg";
 import loaderGif from "./loader.svg";
 import scannerGif from "./scannerGif.svg";
+import placeholder from "./placeholder.png";
 export {
   locIcon,
   mail2Icon,
@@ -27,4 +28,5 @@ export {
   tapCardIcon,
   loaderGif,
   scannerGif,
+  placeholder,
 };

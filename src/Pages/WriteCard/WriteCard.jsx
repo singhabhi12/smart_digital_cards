@@ -26,7 +26,7 @@ export default function WriteCard() {
         <h1>
           Tap your Card on
           <br />
-          back of your device write.
+          back of your device to write.
         </h1>
 
         <div className={styles.tapDeviceIcon} onClick={scan}>

@@ -4,7 +4,6 @@ import edit_icon from "../../assets/edit.svg";
 import savecard_icon from "../../assets/savecard_icon.svg";
 import send_icon from "../../assets/send.svg";
 import barcode_icon from "../../assets/scan-barcode.svg";
-import ducky from "../../assets/ducky.jpeg";
 import { useNavigate } from "react-router-dom";
 //FIREBASE @imports
 import { auth } from "../../firebase-config";
@@ -15,6 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../Helper/Context";
 import { useContext, useEffect } from "react";
+import { placeholder } from "../../assets/getAssests";
 
 const UtilityCard = ({ data }) => {
   const navigate = useNavigate(null);
@@ -27,10 +27,12 @@ const UtilityCard = ({ data }) => {
 };
 
 export default function MainProfile() {
-  const { user, setUser, card, setCard, navigate } = useContext(AuthContext);
+  const { user, setUser, card, setCard, navigate, fetchCard } =
+    useContext(AuthContext);
 
   useEffect(() => {
     if (!user) navigate("/");
+    fetchCard(user?.uid);
   }, [user]);
   const utilities = [
     {
@@ -41,7 +43,7 @@ export default function MainProfile() {
     {
       icon: edit_icon,
       info: "Update NFC Card",
-      redirect: "",
+      redirect: "/write-card",
     },
   ];
 
@@ -64,7 +66,7 @@ export default function MainProfile() {
         <div className={styles.body}>
           <div className={styles.profile}>
             <img
-              src={user?.photoURL ? user?.photoURL : ducky}
+              src={user?.photoURL ? user?.photoURL : placeholder}
               alt="profile_image"
               className={styles.profile_img}
             />
@@ -107,14 +109,14 @@ export default function MainProfile() {
             <div className={styles.pofile_btns}>
               <button
                 className={styles.send_profile}
-                onClick={() => navigate("/send-card")}
+                onClick={() => navigate("/write-card")}
               >
                 <img src={send_icon} alt="send_icon" />
                 {/* <span>Send Card</span> */}
               </button>
               <button
                 className={styles.receive_profile}
-                onClick={() => navigate("/receive-card")}
+                onClick={() => navigate("/scan-card")}
               >
                 <img src={barcode_icon} alt="barcode_icon" />
                 {/* <span>Receive Card</span> */}

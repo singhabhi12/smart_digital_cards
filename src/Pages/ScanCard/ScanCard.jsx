@@ -44,7 +44,8 @@ export default function ScanCard() {
           setMessage(textDecoder.decode(record.data));
           break;
         case "url":
-          // TODO: Read URL record with record data.
+          const textDecoder2 = new TextDecoder(record.encoding);
+          setMessage(textDecoder2.decode(record.data));
           break;
         default:
         // TODO: Handle other records with record data.
