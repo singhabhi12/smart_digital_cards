@@ -1,13 +1,12 @@
 import Card from "../../Layouts/Layout";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ScanCard.module.scss";
 import { useNavigate } from "react-router-dom";
 
 export default function ScanCard() {
   const [message, setMessage] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
-  const navigate = useNavigate();
 
   const scan = async () => {
     if ("NDEFReader" in window) {
@@ -30,6 +29,12 @@ export default function ScanCard() {
     }
   };
 
+  function readUrlRecord(record) {
+    console.assert(record.recordType === "url");
+    const textDecoder = new TextDecoder();
+    console.log(`URL: ${textDecoder.decode(record.data)}`);
+  }
+
   const onReading = ({ message, serialNumber }) => {
     setSerialNumber(serialNumber);
     for (const record of message.records) {
@@ -40,7 +45,7 @@ export default function ScanCard() {
         case "url":
           const textDecoder = new TextDecoder(record.encoding);
           setMessage(textDecoder.decode(record.data));
-          navigate(message);
+          window.open(`${textDecoder.decode(record.data)}`, "_blank");
           break;
         default:
         // TODO: Handle other records with record data.

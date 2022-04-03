@@ -70,7 +70,7 @@ export default function CreateCard() {
         theme: "colored",
       });
     }
-  }, [card,profilePic]);
+  }, [card, profilePic]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -81,7 +81,7 @@ export default function CreateCard() {
         email,
         contact,
         location,
-        whatsapp: socials?.whatsapp,
+        whatsapp: socials?.whatsapp || contact,
         fb: socials?.fb,
         web: socials?.web,
         file: profilePic,
@@ -110,6 +110,7 @@ export default function CreateCard() {
             <div className={styles.input_cntr}>
               <input
                 type="text"
+                placeholder="web developer, data scientist ..."
                 value={profession}
                 onChange={(event) => setProfession(event.target.value)}
                 required
@@ -137,6 +138,7 @@ export default function CreateCard() {
               <span>|</span>
               <input
                 type="text"
+                placeholder="9694174XXX"
                 value={contact}
                 onChange={(event) => setContact(event.target.value)}
                 required
@@ -150,6 +152,7 @@ export default function CreateCard() {
               <span>|</span>
               <input
                 type="text"
+                placeholder="Mumbai"
                 value={location}
                 onChange={(event) => setLocation(event.target.value)}
                 required
@@ -162,8 +165,9 @@ export default function CreateCard() {
               <img src={webIcon} alt="website_icon" />
               <span>|</span>
               <input
-                type="url"
+                type="text"
                 value={socials?.web}
+                placeholder="https://mario.com"
                 onChange={(event) =>
                   setSocials({
                     web: event.target.value,
@@ -171,7 +175,6 @@ export default function CreateCard() {
                     whatsapp: socials?.whatsapp,
                   })
                 }
-                required
               />
             </div>
           </label>
@@ -198,6 +201,7 @@ export default function CreateCard() {
               <span>|</span>
               <input
                 type="text"
+                placeholder="@whatsapp_number"
                 value={socials?.whatsapp}
                 onChange={(event) =>
                   setSocials({
@@ -206,7 +210,6 @@ export default function CreateCard() {
                     whatsapp: event.target.value,
                   })
                 }
-                required
               />
             </div>
           </label>
@@ -216,8 +219,9 @@ export default function CreateCard() {
               <img src={fbIcon} alt="facebook_icon" />
               <span>|</span>
               <input
-                type="url"
+                type="text"
                 value={socials?.fb}
+                placeholder="https://fb.com/@username"
                 onChange={(event) =>
                   setSocials({
                     web: socials?.web,
@@ -225,7 +229,6 @@ export default function CreateCard() {
                     whatsapp: socials?.whatsapp,
                   })
                 }
-                required
               />
             </div>
           </label>

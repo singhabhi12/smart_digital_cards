@@ -1,13 +1,14 @@
 .toast {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background: rgba(41, 45, 50, 0.64);
-  background-attachment: fixed;
+  background-size: cover;
   display: grid;
   place-items: center;
+  border:1px solid;
 
   .content {
     width: 335px;

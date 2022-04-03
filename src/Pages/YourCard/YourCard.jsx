@@ -3,7 +3,7 @@ import styles from "./YourCard.module.scss";
 import { AuthContext } from "../../Helper/Context";
 import Card from "../../Layouts/Layout";
 
-import { sendIcon, saveCardIcon, editIcon } from "../../assets/getAssests";
+import { editIcon } from "../../assets/getAssests";
 import ProfileCard from "../../Components/ProfileCard/ProfileCard";
 import { useNavigate } from "react-router-dom";
 
