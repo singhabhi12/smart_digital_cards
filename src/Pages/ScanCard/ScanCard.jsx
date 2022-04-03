@@ -2,10 +2,9 @@ import Card from "../../Layouts/Layout";
 
 import React, { useEffect, useState } from "react";
 import styles from "./ScanCard.module.scss";
-import { useNavigate } from "react-router-dom";
 
 export default function ScanCard() {
-  const [message, setMessage] = useState("");
+  const [url, setUrl] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
 
   const scan = async () => {
@@ -20,7 +19,7 @@ export default function ScanCard() {
         };
 
         ndef.onreading = (event) => {
-          console.log("NDEF message read.");
+          console.log("NDEF url read.");
           onReading(event);
         };
       } catch (error) {
@@ -29,22 +28,16 @@ export default function ScanCard() {
     }
   };
 
-  function readUrlRecord(record) {
-    console.assert(record.recordType === "url");
-    const textDecoder = new TextDecoder();
-    console.log(`URL: ${textDecoder.decode(record.data)}`);
-  }
-
-  const onReading = ({ message, serialNumber }) => {
+  const onReading = ({ url, serialNumber }) => {
     setSerialNumber(serialNumber);
-    for (const record of message.records) {
+    for (const record of url.records) {
       switch (record.recordType) {
         case "text":
           //incase of txt mssg
           break;
         case "url":
           const textDecoder = new TextDecoder(record.encoding);
-          setMessage(textDecoder.decode(record.data));
+          setUrl(textDecoder.decode(record.data));
           window.open(`${textDecoder.decode(record.data)}`, "_blank");
           break;
         default:
@@ -54,7 +47,7 @@ export default function ScanCard() {
   };
 
   useEffect(() => {
-    console.log({ message, serialNumber });
+    console.log({ url, serialNumber });
     scan();
   }, [scan]);
 
@@ -69,7 +62,11 @@ export default function ScanCard() {
         <div className={styles.tapDeviceIcon}>
           <span>Tap Device</span>
         </div>
-
+        {url && (
+          <a className={styles.card_link} href={url} target="_blank">
+            Card Found! : {url}
+          </a>
+        )}
         <p>
           Make sure to keep your device
           <br /> supports NFC or else use
