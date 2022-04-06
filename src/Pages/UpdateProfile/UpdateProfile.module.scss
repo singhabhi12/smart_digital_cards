@@ -1,18 +1,17 @@
-.login_page {
+.update_profile_page {
   min-height: 100vh;
   background: rgba(25, 26, 27, 1);
   padding-left: 1rem;
 }
-
 .container {
+  background-size: cover;
   width: 100%;
   max-width: 750px;
-  margin: auto;
-  background-size: cover;
   background-position: fixed;
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  margin: auto;
 
   .head {
     text-align: left;
@@ -33,7 +32,7 @@
     }
   }
   .form_container {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
     form {
       display: flex;
       flex-direction: column;
@@ -49,6 +48,30 @@
           font-size: 11px;
           line-height: 16px;
           margin-top: 0.2rem;
+        }
+        .file_input {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          .file {
+            opacity: 0;
+            width: 0.1px;
+            height: 0.1px;
+            position: absolute;
+          }
+          .uploadBtnText {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid;
+            border-radius: 20px;
+            padding: 0.25rem;
+            width: 110px;
+
+            img {
+              margin: 0 0.25rem;
+            }
+          }
         }
         .input_cntr {
           margin-top: 1.25rem;
@@ -72,7 +95,7 @@
         }
       }
 
-      .login_policy {
+      .signup_policy {
         display: flex;
         margin-top: 1.5rem;
         padding: 1rem 0;
@@ -86,6 +109,14 @@
           text-align: left;
           padding-left: 0.5rem;
         }
+      }
+      .reset_pwd_btn {
+        width: 180px;
+        padding: .5rem;
+        margin: 1rem auto;
+        border: 0;
+        border-radius: 60px;
+        cursor: pointer;
       }
 
       .submit_btn {

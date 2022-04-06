@@ -1,4 +1,4 @@
-.login_page {
+.reset_pwd_page {
   min-height: 100vh;
   background: rgba(25, 26, 27, 1);
   padding-left: 1rem;
@@ -55,12 +55,6 @@
           display: flex;
           border-bottom: 1px solid rgba(243, 239, 239, 0.24);
           padding-bottom: 0.2rem;
-          .eyes_icons {
-            width: 20px;
-            filter: invert(1);
-            cursor: pointer;
-            margin-right: 0.25rem;
-          }
           input {
             background: rgba(25, 26, 27, 1);
             color: white;

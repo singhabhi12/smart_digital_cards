@@ -1,20 +1,19 @@
 import styles from "./MainProfile.module.scss";
-import user_icon from "../../assets/user.svg";
-import edit_icon from "../../assets/edit.svg";
-import savecard_icon from "../../assets/savecard_icon.svg";
-import send_icon from "../../assets/send.svg";
-import barcode_icon from "../../assets/scan-barcode.svg";
 import { useNavigate } from "react-router-dom";
 //FIREBASE @imports
 import { auth } from "../../firebase-config";
 import { signOut } from "firebase/auth";
 
-//TOASTIFY @imports
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../Helper/Context";
 import { useContext, useEffect } from "react";
-import { placeholder } from "../../assets/getAssests";
+import {
+  barcode_icon,
+  edit_icon,
+  placeholder,
+  savecard_icon,
+  sendIcon,
+  user_icon,
+} from "../../assets/getAssests";
 
 const UtilityCard = ({ data }) => {
   const navigate = useNavigate(null);
@@ -73,7 +72,7 @@ export default function MainProfile() {
             <div className={styles.profile_info}>
               <h4 className={styles.username}>{user?.displayName}</h4>
               <p className={styles.useremail}>{user?.email}</p>
-              <a href="#" className={styles.edit_profile}>
+              <a href="/update-profile" className={styles.edit_profile}>
                 Edit Profile
               </a>
             </div>
@@ -111,7 +110,7 @@ export default function MainProfile() {
                 className={styles.send_profile}
                 onClick={() => navigate("/write-card")}
               >
-                <img src={send_icon} alt="send_icon" />
+                <img src={sendIcon} alt="send_icon" />
                 {/* <span>Send Card</span> */}
               </button>
               <button
@@ -124,18 +123,6 @@ export default function MainProfile() {
             </div>
           </div>
         </div>
-
-        <ToastContainer
-          position="top-center"
-          autoClose={12}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
       </div>
     </div>
   );

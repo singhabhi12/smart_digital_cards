@@ -1,6 +1,9 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
+  updateEmail,
+  updatePassword,
   updateProfile,
 } from "firebase/auth";
 import {
@@ -14,7 +17,13 @@ import {
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
-import { createContext, useCallback, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { auth, db, storage } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +32,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const AuthContext = createContext({});
+export function useAuth() {
+  return useContext(AuthContext);
+}
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [card, setCard] = useState({});
@@ -32,16 +44,7 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   //firebase helper methdods
-  async function getUser() {
-    try {
-      await onAuthStateChanged(auth, (currentUser) => {
-        console.log("loggedIn user:", currentUser);
-        setUser(currentUser);
-      });
-    } catch (err) {
-      console.log(err.message);
-    }
-  }
+
   const SavedCards = async (user) => {
     console.log("saved card db initiated!");
     try {
@@ -234,7 +237,7 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log("Card fetch miss>", error.message);
     }
-  }, [user, profiles]);
+  }, [user]);
 
   //resource: https://firebase.google.com/docs/firestore/manage-data/add-data#set_a_document
   const Create_or_Update_Card = async (user, data) => {
@@ -292,9 +295,62 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
+  const updateUserProfile = async (username, profilePic = "", email) => {
+    console.log("username, profile, email:", username, profilePic, email);
+    try {
+      setLoading(true);
+      if (profilePic) {
+        console.log('hi:',profilePic)
+        //upload img to firestorage logic
+        const imageRef = ref(storage, `images/${profilePic.name}`);
+        const snapshot = await uploadBytes(imageRef, profilePic);
+        const downloadUrl = await getDownloadURL(imageRef);
+        console.log("File uploaded> Snapshot:", snapshot);
+
+        await updateProfile(auth.currentUser, {
+          photoURL: downloadUrl,
+        });
+      }
+      await updateProfile(auth.currentUser, {
+        displayName: username,
+      });
+      await updateEmail(auth.currentUser, email);
+      navigate("/profile");
+      toast.success("Profile Updated Successfully !", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      toast.error("Profile Update Failure !", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    getUser();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
     fetchSavedProfiles();
+
+    return unsubscribe;
   }, [user]);
 
   return (
@@ -316,6 +372,8 @@ const AuthProvider = ({ children }) => {
         SaveProfile,
         setShowAlert,
         showAlert,
+        resetPassword,
+        updateUserProfile,
       }}
     >
       {children}

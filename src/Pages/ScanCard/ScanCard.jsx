@@ -1,13 +1,13 @@
 import Card from "../../Layouts/Layout";
-
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./ScanCard.module.scss";
 
 export default function ScanCard() {
-  const [url, setUrl] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
+  const [message, setMessage] = useState("");
 
-  const scan = async () => {
+  const scan = useCallback(async () => {
+    console.log("hi");
     if ("NDEFReader" in window) {
       try {
         const ndef = new window.NDEFReader();
@@ -19,26 +19,26 @@ export default function ScanCard() {
         };
 
         ndef.onreading = (event) => {
-          console.log("NDEF url read.");
+          console.log("NDEF message read.");
           onReading(event);
         };
       } catch (error) {
         console.log(`Error! Scan failed to start: ${error}.`);
       }
     }
-  };
+  }, []);
 
-  const onReading = ({ url, serialNumber }) => {
+  const onReading = ({ message, serialNumber }) => {
     setSerialNumber(serialNumber);
-    for (const record of url.records) {
+    for (const record of message.records) {
       switch (record.recordType) {
         case "text":
-          //incase of txt mssg
+          const textDecoder = new TextDecoder(record.encoding);
+          setMessage(textDecoder.decode(record.data));
           break;
         case "url":
-          const textDecoder = new TextDecoder(record.encoding);
-          setUrl(textDecoder.decode(record.data));
-          window.open(`${textDecoder.decode(record.data)}`, "_blank");
+          const urlDecoder = new TextDecoder();
+          setMessage(urlDecoder.decode(record.data));
           break;
         default:
         // TODO: Handle other records with record data.
@@ -47,7 +47,6 @@ export default function ScanCard() {
   };
 
   useEffect(() => {
-    console.log({ url, serialNumber });
     scan();
   }, [scan]);
 
@@ -62,9 +61,9 @@ export default function ScanCard() {
         <div className={styles.tapDeviceIcon}>
           <span>Tap Device</span>
         </div>
-        {url && (
-          <a className={styles.card_link} href={url} target="_blank">
-            Card Found! : {url}
+        {message && (
+          <a className={styles.card_link} href={message} target="_blank">
+            Card Found
           </a>
         )}
         <p>

@@ -47,7 +47,11 @@
     display: block;
     padding: 1rem;
     font-size: 1.1rem;
-    color: blue;
+    color: black;
+    text-decoration: none;
+    border: 1px solid;
+    border-radius: 20px;
+    margin: 1rem 0;
   }
   a {
     margin: 0 0.2rem;

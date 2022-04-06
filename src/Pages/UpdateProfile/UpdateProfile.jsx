@@ -1,17 +1,13 @@
 import { useContext, useState, useEffect } from "react";
-import styles from "./SignUp.module.scss";
-import { useNavigate } from "react-router-dom";
+import styles from "./UpdateProfile.module.scss";
+import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../Helper/Context";
 import {
-  checkOn,
   imgIcon,
   mail,
-  password,
   userIcon,
   close,
-  eye_open,
-  eye_close,
 } from "../../assets/getAssests";
 
 //TOASTIFY @imports
@@ -19,49 +15,36 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../Components/Loader/Loader";
 
-export default function SignUp() {
+export default function Update() {
   const navigate = useNavigate(); //to navigate b/w pages
 
   //form states
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState(null);
-  const [pwd, setPwd] = useState("");
-  const [showPwd, setShowPwd] = useState("");
+
 
   //handlers functions
   const handleEmailInput = (event) => setEmail(event.target.value);
   const handleUsernameInput = (event) => setUsername(event.target.value);
-  const handlePwdInput = (event) => setPwd(event.target.value);
 
-  const { registerUser, loading } = useContext(AuthContext);
+  const { user, updateUserProfile, loading } = useContext(AuthContext);
 
   //register user func
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (email !== "" && pwd !== "" && profilePic !== null) {
-      await registerUser(username, email, pwd, profilePic);
-      console.log("profile pic:", profilePic);
-    } else {
-      toast.info("Pls upload your profile picture!", {
-        position: "top-center",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    if (email !== "" && username !== "") {
+      await updateUserProfile(username, profilePic, email);
     }
   };
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (localStorage.getItem("user") === user?.uid || user?.uid) {
-      navigate("/profile");
+    if (user?.uid) {
+      user?.displayName && setUsername(user?.displayName);
+      user?.email && setEmail(user?.email);
+    } else {
+      console.log("no card fetched!");
     }
-
     if (profilePic !== null) {
       toast.success(`${profilePic.name} is selected as profile pic!`, {
         position: "top-center",
@@ -77,14 +60,14 @@ export default function SignUp() {
   }, [user, profilePic]);
 
   return (
-    <div className={styles.signup_page}>
+    <div className={styles.update_profile_page}>
       <div className={styles.container}>
         <div className={styles.head}>
           <div className={styles.nav}>
             <img src={close} alt="close btn" onClick={() => navigate(-1)} />
           </div>
-          <h1>Let’s Get Started!</h1>
-          <p>Fill the form to signup.</p>
+          <h1>Update Profile</h1>
+          <p>Fill the form to update profile crendential.</p>
         </div>
 
         <div className={styles.form_container}>
@@ -118,7 +101,7 @@ export default function SignUp() {
 
             <label>
               <div className={styles.file_input}>
-                <span>Upload your profile picture</span>
+                <span>Update your profile picture</span>
                 <input
                   type="file"
                   className={styles.file}
@@ -132,40 +115,15 @@ export default function SignUp() {
                 </span>
               </div>
             </label>
-            <label>
-              Password
-              <div className={styles.input_cntr}>
-                <img src={password} alt="icon" />
-                <input
-                  type={showPwd ? "text" : "password"}
-                  value={pwd}
-                  onChange={handlePwdInput}
-                  placeholder="*  *  *  *  *  *  *  *"
-                  required
-                />
-                <img
-                  src={showPwd ? eye_open : eye_close}
-                  alt=""
-                  className={styles.eyes_icons}
-                  onClick={() => setShowPwd(!showPwd)}
-                />
-              </div>
-              <p className={styles.pwdRule}>
-                At least 8 characters, 1 uppercase letter, 1 number & 1 symbol
-              </p>
-            </label>
-
-            <div className={styles.signup_policy}>
-              <img src={checkOn} alt="icon" />
-              <span>
-                By Signing up, you agree to the Terms of Service and Privacy
-                Policy .
-              </span>
-            </div>
+            <button className={styles.reset_pwd_btn}>
+              <Link style={{ color: "black" }} to="/reset-pwd">
+                Reset Password?
+              </Link>
+            </button>
 
             <button className={styles.submit_btn} type="submit">
               {" "}
-              Sign Up
+              Update
             </button>
           </form>
         </div>

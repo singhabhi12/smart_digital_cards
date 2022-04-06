@@ -1,12 +1,13 @@
 import Card from "../../Layouts/Layout";
 
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import styles from "./WriteCard.module.scss";
 import { AuthContext } from "../../Helper/Context";
 
 export default function WriteCard() {
   const { user } = useContext(AuthContext);
-  const onWrite = async (message) => {
+
+  const onWrite = useCallback(async (message) => {
     console.log("mssg:", message);
     if ("NDEFReader" in window) {
       try {
@@ -20,11 +21,11 @@ export default function WriteCard() {
         alert(`Something went wrong!`);
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (user?.uid) onWrite(`https://fir-9-be.web.app/profile/${user.uid}`);
-  }, [user]);
+  }, [user, onWrite]);
 
   return (
     <Card>

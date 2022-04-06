@@ -51,10 +51,18 @@
           text-decoration: underline;
         }
         .edit_profile {
+          display: block;
           text-decoration: none;
           font-size: 0.85rem;
+          border: 1px solid transparent;
+          padding: 0.15rem;
+          width: 90px;
+          margin-top: 0.25rem;
+          text-align: center;
+          background: rgb(56, 56, 56);
+          border-radius: 16px;
           font-family: "hellix-400", sans-serif;
-          color: rgba(88, 89, 90, 1);
+          color: white;
         }
       }
     }

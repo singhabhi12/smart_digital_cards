@@ -1,5 +1,5 @@
 import styles from "./Landing.module.scss";
-import cards from "../../assets/cards.svg";
+import cards from "../../assets/Images/cards.svg";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../../Helper/Context";

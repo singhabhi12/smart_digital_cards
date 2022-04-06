@@ -1,10 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import styles from "./Login.module.scss";
-import close from "../../assets/close.svg";
-import mail from "../../assets/mail.svg";
-import password from "../../assets/password.svg";
-import checkOn from "../../assets/checkOn.svg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //FIREBASE @imports
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
@@ -15,6 +11,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../Helper/Context";
 import Loader from "../../Components/Loader/Loader";
+import {
+  checkOn,
+  close,
+  eye_close,
+  eye_open,
+  mail,
+  password,
+} from "../../assets/getAssests";
 
 export default function Login() {
   const navigate = useNavigate(); //to navigate b/w pages
@@ -24,6 +28,7 @@ export default function Login() {
   const [pwd, setPwd] = useState("");
   const { user, loading, setLoading } = useContext(AuthContext);
   const [rememberUser, setRememberStatus] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
 
   //handlers functions
   const handleEmailInput = (event) => setEmail(event.target.value);
@@ -96,14 +101,24 @@ export default function Login() {
               <div className={styles.input_cntr}>
                 <img src={password} alt="icon" />
                 <input
-                  type="password"
+                  type={showPwd ? "text" : "password"}
                   value={pwd}
                   onChange={handlePwdInput}
                   placeholder="*  *  *  *  *  *  *  *"
                   required
                 />
+                <img
+                  src={showPwd ? eye_open : eye_close}
+                  alt=""
+                  className={styles.eyes_icons}
+                  onClick={() => setShowPwd(!showPwd)}
+                />
               </div>
-              <p className={styles.pwdRule}>Reset Password</p>
+              <p className={styles.pwdRule}>
+                <Link to="/reset-pwd" style={{ color: "white" }}>
+                  Forgot Password?
+                </Link>
+              </p>
             </label>
 
             <div className={styles.login_policy}>
