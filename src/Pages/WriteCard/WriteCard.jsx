@@ -22,11 +22,9 @@ export default function WriteCard() {
       }
     }
   }, []);
-
   useEffect(() => {
-    if (user?.uid) onWrite(`https://fir-9-be.web.app/profile/${user.uid}`);
+    if (user?.uid) onWrite(`https://smart-nfc-business-cards.web.app/profile/${user.uid}`);
   }, [user, onWrite]);
-
   return (
     <Card>
       <div className={styles.container}>

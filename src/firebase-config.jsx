@@ -6,12 +6,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD2Ri-EfQC2NqZiPJ5_-wXUIvk5uGVaykQ",
-  authDomain: "fir-9-be.firebaseapp.com",
-  projectId: "fir-9-be",
-  storageBucket: "fir-9-be.appspot.com",
-  messagingSenderId: "140390399208",
-  appId: "1:140390399208:web:51f0c3090df854aad4dd5d",
+  apiKey: "AIzaSyB_86Yy8jWHkcPuuWo8uQVezS_alvVggCc",
+  authDomain: "smart-nfc-business-cards.firebaseapp.com",
+  projectId: "smart-nfc-business-cards",
+  storageBucket: "smart-nfc-business-cards.appspot.com",
+  messagingSenderId: "947047831032",
+  appId: "1:947047831032:web:22fc345fe91e118e3b720d"
 };
 
 // Initialize Firebase
